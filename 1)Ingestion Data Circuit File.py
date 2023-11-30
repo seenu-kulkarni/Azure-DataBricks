@@ -34,13 +34,23 @@ from pyspark.sql.types import StructType, StructField, IntegerType, StringType, 
 
 # COMMAND ----------
 
-
+circuit_schema = StructType(fields=[
+    StructField("circuitid",IntegerType(),False),
+    StructField("circuitref",StringType(),True),
+    StructField("name",StringType(),True),
+    StructField("location",StringType(),True),
+    StructField("country",StringType(),True),
+    StructField("lat",DoubleType(),True),
+    StructField("lng",DoubleType(),True),
+    StructField("alt",IntegerType(),True),
+    StructField("url",StringType(),True),
+])
 
 # COMMAND ----------
 
 circuit_df = spark.read\
     .option("Header",True)\
-    .option("inferSchema",True)\
+    .schema(circuit_schema)\
     .csv("dbfs:/mnt/formula1stor/raw/circuits.csv")
 
 
@@ -48,6 +58,56 @@ circuit_df = spark.read\
 
 #print Schema
 circuit_df.printSchema()
+
+# COMMAND ----------
+
+display(circuit_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Select Required Column in the Circuit Data Frame
+
+# COMMAND ----------
+
+circuits_selected_df = circuit_df.select("circuitid","circuitref","name","location","country","lat","lng","alt")
+
+# COMMAND ----------
+
+circuits_selected_df = circuit_df.select(circuit_df.circuitid,circuit_df.circuitref,circuit_df.name,circuit_df.location,circuit_df.country,circuit_df.lat,circuit_df.lng,circuit_df.alt)
+
+# COMMAND ----------
+
+circuits_selected_df = circuit_df.select(circuit_df["circuitid"],circuit_df["circuitref"],circuit_df["name"],circuit_df["location"],circuit_df["country"],circuit_df["lat"],circuit_df["lng"],circuit_df["alt"])
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+
+# COMMAND ----------
+
+circuits_selected_df = circuit_df.select(col("circuitid"),col("circuitref"),col("name"),col("location"),col("country").alias("Country_location"),col("lat"),col("lng"),col("alt"))
+
+# COMMAND ----------
+
+display(circuits_selected_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Rename Columns
+
+# COMMAND ----------
+
+circuit_renamed_df = circuits_selected_df.withColumnRenamed("circuitid","circuit_id") \
+.withColumnRenamed("circuitref","circuit_ref") \
+.withColumnRenamed("lat","latitude") \
+.withColumnRenamed("lng","longitude") \
+.withColumnRenamed("alt","altitude")
+
+# COMMAND ----------
+
+display(circuit_renamed_df)
 
 # COMMAND ----------
 
