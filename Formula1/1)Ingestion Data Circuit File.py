@@ -111,4 +111,44 @@ display(circuit_renamed_df)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Add Ingestion Date to the Data Frame
+
+# COMMAND ----------
+
+from pyspark.sql.functions import current_timestamp,lit
+
+# COMMAND ----------
+
+circuit_final_df = circuit_renamed_df.withColumn("IngestionDate",current_timestamp())
+   # .withColumn("env",lit("Development"))
+
+# COMMAND ----------
+
+display(circuit_final_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Write Data to datalake as parquet
+
+# COMMAND ----------
+
+circuit_final_df.write.mode("overwrite").parquet("/mnt/formula1stor/processed/circuits")
+
+# COMMAND ----------
+
+# MAGIC %fs
+# MAGIC ls /mnt/formula1stor/processed/circuits
+
+# COMMAND ----------
+
+df = spark.read.parquet("/mnt/formula1stor/processed/circuits")
+
+# COMMAND ----------
+
+display(df)
+
+# COMMAND ----------
+
 
