@@ -120,8 +120,8 @@ from pyspark.sql.functions import current_timestamp,lit
 
 # COMMAND ----------
 
-circuit_final_df = circuit_renamed_df.withColumn("IngestionDate",current_timestamp())
-   # .withColumn("env",lit("Development"))
+circuit_final_df = circuit_renamed_df.withColumn("IngestionDate",current_timestamp())\
+   .withColumn("env",lit("Development"))
 
 # COMMAND ----------
 
