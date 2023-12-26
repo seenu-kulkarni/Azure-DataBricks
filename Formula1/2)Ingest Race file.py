@@ -23,7 +23,7 @@ races_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 races_df = spark.read \
 .option("header", True) \
 .schema(races_schema) \
-.csv("/mnt/formula1stor/raw/races.csv")
+.csv("/mnt/adlsgen2formula1/raw/races.csv")
 
 # COMMAND ----------
 
@@ -39,6 +39,10 @@ from pyspark.sql.functions import current_timestamp, to_timestamp, concat, col, 
 races_with_timestamp_df = races_df.withColumn("ingestion_date", current_timestamp()) \
                                   .withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))
 
+
+# COMMAND ----------
+
+display(races_with_timestamp_df.show)
 
 # COMMAND ----------
 
@@ -58,7 +62,7 @@ races_selected_df = races_with_timestamp_df.select(col('raceId').alias('race_id'
 
 # COMMAND ----------
 
-races_selected_df.write.mode('overwrite').partitionBy('race_year').parquet('/mnt/formula1stor/processed/races')
+races_selected_df.write.mode('overwrite').partitionBy('race_year').parquet('/mnt/adlsgen2formula1/processed/races')
 
 # COMMAND ----------
 
