@@ -4,11 +4,11 @@ display(dbutils.fs.mounts())
 # COMMAND ----------
 
 # MAGIC %fs
-# MAGIC ls /mnt/formula1stor/raw
+# MAGIC ls /mnt/adlsgen2formula1/raw
 
 # COMMAND ----------
 
-circuit_df = spark.read.option("Header",True).csv("dbfs:/mnt/formula1stor/raw/circuits.csv")
+circuit_df = spark.read.option("Header",True).csv("dbfs:/mnt/adlsgen2formula1/raw/circuits.csv")
 
 
 # COMMAND ----------
@@ -51,7 +51,7 @@ circuit_schema = StructType(fields=[
 circuit_df = spark.read\
     .option("Header",True)\
     .schema(circuit_schema)\
-    .csv("dbfs:/mnt/formula1stor/raw/circuits.csv")
+    .csv("dbfs:/mnt/adlsgen2formula1/raw/circuits.csv")
 
 
 # COMMAND ----------
@@ -134,16 +134,16 @@ display(circuit_final_df)
 
 # COMMAND ----------
 
-circuit_final_df.write.mode("overwrite").parquet("/mnt/formula1stor/processed/circuits")
+circuit_final_df.write.mode("overwrite").parquet("/mnt/adlsgen2formula1/processed/circuits")
 
 # COMMAND ----------
 
 # MAGIC %fs
-# MAGIC ls /mnt/formula1stor/processed/circuits
+# MAGIC ls /mnt/adlsgen2formula1/processed/circuits
 
 # COMMAND ----------
 
-df = spark.read.parquet("/mnt/formula1stor/processed/circuits")
+df = spark.read.parquet("/mnt/adlsgen2formula1/processed/circuits")
 
 # COMMAND ----------
 
