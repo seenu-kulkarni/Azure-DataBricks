@@ -5,6 +5,7 @@ display(dbutils.fs.mounts())
 
 # MAGIC %fs
 # MAGIC ls /mnt/formula1stor/raw
+# MAGIC 1
 
 # COMMAND ----------
 
